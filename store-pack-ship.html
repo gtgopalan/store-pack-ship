@@ -41,8 +41,8 @@
 
       /* Text */
       --text:       #ffffff;
-      --text-dim:   rgba(255,255,255,0.55);
-      --text-faint: rgba(255,255,255,0.25);
+      --text-dim:   rgba(255,255,255,0.72);
+      --text-faint: rgba(255,255,255,0.45);
 
       /* Fonts */
       --font-title: 'Gemunu Libre', sans-serif;
@@ -63,26 +63,30 @@
       --border:     rgba(1,99,196,0.16);
       --border-2:   rgba(0,183,183,0.2);
       --text:       #000000;
-      --text-dim:   rgba(0,0,0,0.62);
-      --text-faint: rgba(0,0,0,0.38);
+      --text-dim:   rgba(0,0,0,0.72);
+      --text-faint: rgba(0,0,0,0.52);
     }
 
-    /* Hero — light version */
+    /* Hero — light version uses same photo, tinted overlay */
     [data-theme="light"] .hero-bg {
-      background:
-        radial-gradient(ellipse 70% 55% at 65% 35%, #b8d4f0 0%, transparent 65%),
-        radial-gradient(ellipse 50% 40% at 20% 75%, #b0eaea 0%, transparent 60%),
-        #edf4ff;
+      background-image: url('hero-warehouse.png');
+      background-size: cover;
+      background-position: center 30%;
     }
     [data-theme="light"] .hero-overlay {
       background: linear-gradient(
         to bottom,
-        rgba(237,244,255,0.1)  0%,
-        rgba(237,244,255,0.05) 30%,
-        rgba(237,244,255,0.75) 75%,
+        rgba(237,244,255,0.35) 0%,
+        rgba(237,244,255,0.25) 35%,
+        rgba(237,244,255,0.82) 70%,
         rgba(237,244,255,1)    100%
       );
     }
+    /* Keep hero text dark and readable on light photo overlay */
+    [data-theme="light"] .hero-tag .badge { color: var(--blue); }
+    [data-theme="light"] .hero-sub        { color: rgba(0,0,0,0.8); }
+    [data-theme="light"] .hero-sub strong { color: #000; }
+    [data-theme="light"] .hero-scroll     { color: rgba(0,0,0,0.5); }
     [data-theme="light"] .hero-grid {
       background-image:
         linear-gradient(rgba(1,99,196,0.07) 1px, transparent 1px),
@@ -117,6 +121,38 @@
 
     /* Process item hover */
     [data-theme="light"] .process-item:hover { background: rgba(1,99,196,0.04); }
+
+    /* ── Neon-on-light fixes (neon yellow is invisible on pale bg) ── */
+    [data-theme="light"] .about-link         { color: var(--blue); }
+    [data-theme="light"] .stats-heading em   { color: var(--blue); }
+    [data-theme="light"] .cta-heading .line-neon { color: var(--blue); }
+    [data-theme="light"] .nav-logo .neon     { color: var(--blue); }
+
+    /* Gallery card tags: neon → blue */
+    [data-theme="light"] .gallery-card-tag {
+      color: var(--blue);
+      background: rgba(1,99,196,0.08);
+      border-color: rgba(1,99,196,0.25);
+    }
+
+    /* ── Teal-on-light fixes (teal #00B7B7 only ~2.7:1 on #edf4ff) ── */
+    [data-theme="light"] .section-tag           { color: var(--blue); }
+    [data-theme="light"] .section-tag::before   { background: var(--blue); }
+    [data-theme="light"] .gallery-card-sector   { color: var(--blue); }
+    [data-theme="light"] .chip                  { color: var(--blue); background: rgba(1,99,196,0.07); border-color: rgba(1,99,196,0.2); }
+    [data-theme="light"] .chip:hover            { background: rgba(1,99,196,0.14); border-color: var(--blue); }
+    [data-theme="light"] .cta-tag               { color: var(--blue); }
+    [data-theme="light"] .cta-tag::before       { background: var(--blue); }
+    [data-theme="light"] .footer-col-heading    { color: var(--blue); }
+    [data-theme="light"] .footer-bottom-links a:hover { color: var(--blue); }
+    [data-theme="light"] .footer-links-list a:hover   { color: var(--blue); }
+    [data-theme="light"] .nav-cta         { border-color: var(--blue); color: var(--blue); }
+    [data-theme="light"] .nav-cta:hover   { background: var(--blue); color: #fff; }
+    [data-theme="light"] .nav-links a:hover { color: var(--blue); }
+    [data-theme="light"] .about-heading em   { color: var(--blue); }
+    [data-theme="light"] .process-heading em { color: var(--teal); } /* teal works on darker process bg */
+    [data-theme="light"] .btn-quote          { background: var(--blue); color: #fff; }
+    [data-theme="light"] .btn-quote:hover    { background: var(--teal); color: #000; }
 
     /* Philosophy section */
     [data-theme="light"] .philosophy-section { background: var(--bg-2); }
@@ -330,14 +366,13 @@
       overflow: hidden;
     }
 
-    /* Cinematic bg — replace with <video> in prod */
+    /* Hero warehouse photo */
     .hero-bg {
       position: absolute;
       inset: 0;
-      background:
-        radial-gradient(ellipse 70% 55% at 65% 35%, #001e3a 0%, transparent 65%),
-        radial-gradient(ellipse 50% 40% at 20% 75%, #001a1a 0%, transparent 60%),
-        #000;
+      background-image: url('hero-warehouse.png');
+      background-size: cover;
+      background-position: center 30%;
       z-index: 0;
     }
 
@@ -363,10 +398,10 @@
       inset: 0;
       background: linear-gradient(
         to bottom,
-        rgba(0,0,0,0.1) 0%,
-        rgba(0,0,0,0.05) 30%,
-        rgba(0,0,0,0.65) 75%,
-        rgba(0,0,0,1) 100%
+        rgba(0,0,0,0.45) 0%,
+        rgba(0,0,0,0.35) 35%,
+        rgba(0,0,0,0.75) 70%,
+        rgba(0,0,0,1)    100%
       );
       z-index: 2;
     }
@@ -402,7 +437,7 @@
       font-weight: 700;
       letter-spacing: 0.3em;
       text-transform: uppercase;
-      color: var(--teal);
+      color: #00e5e5; /* brighter teal for visibility on photo */
       margin-bottom: 1.8rem;
       opacity: 0;
     }
@@ -457,14 +492,14 @@
       font-family: var(--font-mono);
       font-size: clamp(0.75rem, 1vw, 0.9rem);
       font-weight: 400;
-      color: var(--text-dim);
+      color: rgba(255,255,255,0.88);
       max-width: 400px;
       line-height: 1.9;
       border-left: 2px solid var(--teal);
       padding-left: 1.2rem;
     }
 
-    .hero-sub strong { color: var(--text); font-weight: 700; }
+    .hero-sub strong { color: #ffffff; font-weight: 700; }
 
     .hero-scroll {
       display: flex;
@@ -1294,7 +1329,7 @@
       font-weight: 700;
       letter-spacing: 0.22em;
       text-transform: uppercase;
-      color: var(--text-faint);
+      color: var(--text-dim);
       margin-bottom: 0.5rem;
     }
 
@@ -1304,7 +1339,7 @@
       width: 100%;
       background: transparent;
       border: none;
-      border-bottom: 1px solid rgba(0,183,183,0.2);
+      border-bottom: 1px solid rgba(0,183,183,0.4);
       padding: 0.8rem 0;
       color: var(--text);
       font-family: var(--font-mono);
