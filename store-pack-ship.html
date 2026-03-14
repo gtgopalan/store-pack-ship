@@ -1,0 +1,2243 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Store Pack n Ship — 3PL Fulfillment & CPG Distribution</title>
+
+  <!-- Fonts: Gemunu Libre (titles) + Space Mono (console/body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Gemunu+Libre:wght@400;700;800&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" />
+
+  <!-- GSAP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+  <style>
+    /* ─────────────────────────────────────────────
+       RESET & ROOT
+    ───────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      /* Brand palette anchors */
+      --blue:       #0163C4;
+      --teal:       #00B7B7;
+      --mint:       #B8FFD0;
+      --mint-light: #E7FFEF;
+      --neon:       #EEFF41;
+
+      /* Backgrounds */
+      --bg:         #000000;
+      --bg-2:       #030a12;
+      --bg-3:       #050e1a;
+      --surface:    #080f1c;
+      --surface-2:  #0a1526;
+
+      /* Borders */
+      --border:     rgba(0,183,183,0.15);
+      --border-2:   rgba(1,99,196,0.2);
+
+      /* Text */
+      --text:       #ffffff;
+      --text-dim:   rgba(255,255,255,0.55);
+      --text-faint: rgba(255,255,255,0.25);
+
+      /* Fonts */
+      --font-title: 'Gemunu Libre', sans-serif;
+      --font-mono:  'Space Mono', 'Courier New', monospace;
+
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* ─────────────────────────────────────────────
+       LIGHT MODE OVERRIDES
+    ───────────────────────────────────────────── */
+    [data-theme="light"] {
+      --bg:         #edf4ff;
+      --bg-2:       #e0edfb;
+      --bg-3:       #d2e4f8;
+      --surface:    #c4dbf5;
+      --surface-2:  #b5d1f2;
+      --border:     rgba(1,99,196,0.16);
+      --border-2:   rgba(0,183,183,0.2);
+      --text:       #000000;
+      --text-dim:   rgba(0,0,0,0.62);
+      --text-faint: rgba(0,0,0,0.38);
+    }
+
+    /* Hero — light version */
+    [data-theme="light"] .hero-bg {
+      background:
+        radial-gradient(ellipse 70% 55% at 65% 35%, #b8d4f0 0%, transparent 65%),
+        radial-gradient(ellipse 50% 40% at 20% 75%, #b0eaea 0%, transparent 60%),
+        #edf4ff;
+    }
+    [data-theme="light"] .hero-overlay {
+      background: linear-gradient(
+        to bottom,
+        rgba(237,244,255,0.1)  0%,
+        rgba(237,244,255,0.05) 30%,
+        rgba(237,244,255,0.75) 75%,
+        rgba(237,244,255,1)    100%
+      );
+    }
+    [data-theme="light"] .hero-grid {
+      background-image:
+        linear-gradient(rgba(1,99,196,0.07) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(1,99,196,0.07) 1px, transparent 1px);
+    }
+    [data-theme="light"] .hero-headline         { color: #000; }
+    [data-theme="light"] .hero-headline .word-neon { color: var(--blue); }
+    [data-theme="light"] .hero-tag              { color: var(--blue); }
+    [data-theme="light"] .hero-tag::before      { background: var(--blue); }
+    [data-theme="light"] .hero-tag .badge {
+      background: rgba(1,99,196,0.1);
+      border-color: rgba(1,99,196,0.3);
+      color: var(--blue);
+    }
+
+    /* Nav — light scrolled state */
+    [data-theme="light"] nav.scrolled {
+      background: rgba(237,244,255,0.92);
+      border-bottom-color: rgba(1,99,196,0.12);
+    }
+
+    /* Ghost / stroke text — lighten for legibility */
+    [data-theme="light"] .about-ghost {
+      -webkit-text-stroke: 1px rgba(1,99,196,0.1);
+    }
+    [data-theme="light"] .process-num {
+      -webkit-text-stroke: 1px rgba(1,99,196,0.22);
+    }
+    [data-theme="light"] .philosophy-section::before {
+      -webkit-text-stroke: 1px rgba(0,183,183,0.07);
+    }
+
+    /* Process item hover */
+    [data-theme="light"] .process-item:hover { background: rgba(1,99,196,0.04); }
+
+    /* Philosophy section */
+    [data-theme="light"] .philosophy-section { background: var(--bg-2); }
+    [data-theme="light"] .philosophy-section::after {
+      background: radial-gradient(ellipse, rgba(0,183,183,0.07) 0%, transparent 70%);
+    }
+    [data-theme="light"] .philosophy-quote .neon-word { color: var(--blue); }
+
+    /* Stats section */
+    [data-theme="light"] .stats-section { background: var(--bg-3); }
+    [data-theme="light"] .stats-section::before {
+      background: radial-gradient(circle, rgba(0,183,183,0.08) 0%, transparent 70%);
+    }
+
+    /* Tech items */
+    [data-theme="light"] .tech-item       { background: var(--bg); }
+    [data-theme="light"] .tech-item:hover { background: rgba(1,99,196,0.05); }
+
+    /* Footer */
+    [data-theme="light"] footer { background: var(--bg-2); }
+
+    /* Scrollbar track */
+    [data-theme="light"] ::-webkit-scrollbar-track { background: var(--bg); }
+
+    /* ─────────────────────────────────────────────
+       THEME TOGGLE BUTTON
+    ───────────────────────────────────────────── */
+    .theme-toggle {
+      position: relative;
+      width: 52px;
+      height: 26px;
+      border-radius: 13px;
+      border: 1px solid var(--border);
+      background: rgba(0,183,183,0.08);
+      cursor: pointer;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
+      transition: border-color .3s ease, background .3s ease;
+    }
+
+    .theme-toggle:hover { border-color: var(--teal); background: rgba(0,183,183,0.14); }
+
+    .toggle-thumb {
+      position: absolute;
+      left: 3px;
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      background: var(--teal);
+      pointer-events: none;
+      transition: transform .38s cubic-bezier(.16,1,.3,1), background .3s ease;
+    }
+
+    [data-theme="light"] .toggle-thumb {
+      transform: translateX(26px);
+      background: var(--blue);
+    }
+
+    .toggle-icon {
+      position: absolute;
+      font-size: 10px;
+      line-height: 1;
+      pointer-events: none;
+      transition: opacity .3s ease;
+      user-select: none;
+    }
+
+    .toggle-icon--dark  { right: 5px; opacity: 1; }
+    .toggle-icon--light { left:  5px; opacity: 0; }
+
+    [data-theme="light"] .toggle-icon--dark  { opacity: 0; }
+    [data-theme="light"] .toggle-icon--light { opacity: 1; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-mono);
+      font-size: 14px;
+      line-height: 1.7;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      transition: background .4s ease, color .4s ease;
+    }
+
+    ::-webkit-scrollbar { width: 2px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--teal); }
+
+    ::selection { background: var(--neon); color: #000; }
+
+    img { display: block; width: 100%; object-fit: cover; }
+    a   { color: inherit; text-decoration: none; }
+
+    /* ─────────────────────────────────────────────
+       CURSOR
+    ───────────────────────────────────────────── */
+    .cursor {
+      position: fixed;
+      top: 0; left: 0;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--neon);
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%,-50%);
+    }
+    .cursor-ring {
+      position: fixed;
+      top: 0; left: 0;
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      border: 1px solid rgba(0,183,183,0.6);
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%,-50%);
+      transition: width .3s ease, height .3s ease;
+    }
+
+    /* ─────────────────────────────────────────────
+       NAV
+    ───────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.4rem 4rem;
+      transition: background .4s ease, backdrop-filter .4s ease;
+    }
+
+    nav.scrolled {
+      background: rgba(0,0,0,0.88);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-family: var(--font-title);
+      font-weight: 800;
+      font-size: 1.4rem;
+      letter-spacing: 0.06em;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    /* The "·" separator dots in the logo */
+    .nav-logo .dot { color: var(--teal); }
+    .nav-logo .neon { color: var(--neon); }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      transition: color .2s ease;
+    }
+
+    .nav-links a:hover { color: var(--teal); }
+
+    .nav-cta {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 0.6rem 1.5rem;
+      border: 1px solid var(--teal);
+      color: var(--teal);
+      transition: background .2s ease, color .2s ease;
+    }
+    .nav-cta:hover { background: var(--teal); color: #000; }
+
+    .nav-hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+    }
+    .nav-hamburger span {
+      display: block;
+      width: 24px; height: 1.5px;
+      background: var(--text);
+      transition: transform .3s ease;
+    }
+
+    /* ─────────────────────────────────────────────
+       HERO
+    ───────────────────────────────────────────── */
+    .hero {
+      position: relative;
+      height: 100svh;
+      min-height: 620px;
+      display: flex;
+      align-items: flex-end;
+      padding: 0 4rem 6rem;
+      overflow: hidden;
+    }
+
+    /* Cinematic bg — replace with <video> in prod */
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 70% 55% at 65% 35%, #001e3a 0%, transparent 65%),
+        radial-gradient(ellipse 50% 40% at 20% 75%, #001a1a 0%, transparent 60%),
+        #000;
+      z-index: 0;
+    }
+
+    /* Animated grid lines — logistics/warehouse feel */
+    .hero-grid {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background-image:
+        linear-gradient(rgba(0,183,183,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,183,183,0.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+      animation: gridDrift 20s linear infinite;
+    }
+
+    @keyframes gridDrift {
+      from { background-position: 0 0; }
+      to   { background-position: 60px 60px; }
+    }
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(0,0,0,0.1) 0%,
+        rgba(0,0,0,0.05) 30%,
+        rgba(0,0,0,0.65) 75%,
+        rgba(0,0,0,1) 100%
+      );
+      z-index: 2;
+    }
+
+    /* Neon scan line effect */
+    .hero-scanline {
+      position: absolute;
+      inset: 0;
+      z-index: 3;
+      pointer-events: none;
+      background: linear-gradient(
+        to bottom,
+        transparent 0%,
+        rgba(0,183,183,0.015) 50%,
+        transparent 51%
+      );
+      background-size: 100% 4px;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 4;
+      max-width: 1400px;
+      width: 100%;
+    }
+
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.7rem;
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 1.8rem;
+      opacity: 0;
+    }
+
+    .hero-tag::before {
+      content: '';
+      display: block;
+      width: 30px; height: 1px;
+      background: var(--teal);
+    }
+
+    .hero-tag .badge {
+      background: rgba(0,183,183,0.12);
+      border: 1px solid rgba(0,183,183,0.3);
+      padding: 0.2rem 0.6rem;
+      font-size: 0.55rem;
+    }
+
+    .hero-headline {
+      font-family: var(--font-title);
+      font-weight: 800;
+      font-size: clamp(5rem, 11vw, 11.5rem);
+      line-height: 0.9;
+      letter-spacing: -0.01em;
+      color: var(--text);
+    }
+
+    .hero-headline .line {
+      display: block;
+      overflow: hidden;
+    }
+
+    .hero-headline .line-inner {
+      display: block;
+      transform: translateY(110%);
+    }
+
+    .hero-headline .word-teal  { color: var(--teal); }
+    .hero-headline .word-neon  { color: var(--neon); }
+    .hero-headline .word-blue  { color: var(--blue); }
+
+    .hero-bottom {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-top: 2.5rem;
+      gap: 2rem;
+      opacity: 0;
+    }
+
+    .hero-sub {
+      font-family: var(--font-mono);
+      font-size: clamp(0.75rem, 1vw, 0.9rem);
+      font-weight: 400;
+      color: var(--text-dim);
+      max-width: 400px;
+      line-height: 1.9;
+      border-left: 2px solid var(--teal);
+      padding-left: 1.2rem;
+    }
+
+    .hero-sub strong { color: var(--text); font-weight: 700; }
+
+    .hero-scroll {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.6rem;
+      font-family: var(--font-mono);
+      font-size: 0.55rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+    }
+
+    .scroll-bar {
+      width: 1px;
+      height: 50px;
+      background: linear-gradient(to bottom, var(--teal), transparent);
+      animation: scrollDrop 2.2s ease-in-out infinite;
+    }
+
+    @keyframes scrollDrop {
+      0%   { transform: scaleY(0); transform-origin: top; opacity: 0; }
+      50%  { transform: scaleY(1); transform-origin: top; opacity: 1; }
+      100% { transform: scaleY(1); transform-origin: bottom; opacity: 0; }
+    }
+
+    /* ─────────────────────────────────────────────
+       TICKER
+    ───────────────────────────────────────────── */
+    .ticker-wrap {
+      background: var(--neon);
+      overflow: hidden;
+      padding: 0.85rem 0;
+      display: flex;
+    }
+
+    .ticker-track {
+      display: flex;
+      gap: 2.5rem;
+      white-space: nowrap;
+      animation: ticker 30s linear infinite;
+    }
+
+    .ticker-track span {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: #000;
+      flex-shrink: 0;
+    }
+
+    .ticker-track .sep { color: rgba(0,0,0,0.35); }
+
+    @keyframes ticker {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* ─────────────────────────────────────────────
+       SHARED SECTION UTILITIES
+    ───────────────────────────────────────────── */
+    .section-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.7rem;
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--teal);
+    }
+
+    .section-tag::before {
+      content: '';
+      display: block;
+      width: 24px; height: 1px;
+      background: var(--teal);
+    }
+
+    .reveal-up   { opacity: 0; transform: translateY(40px); }
+    .reveal-fade { opacity: 0; }
+
+    /* ─────────────────────────────────────────────
+       ABOUT / INTRO
+    ───────────────────────────────────────────── */
+    .about {
+      padding: 10rem 4rem;
+      display: grid;
+      grid-template-columns: 1fr 1.3fr;
+      gap: 8rem;
+      align-items: start;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .about-ghost {
+      font-family: var(--font-title);
+      font-weight: 800;
+      font-size: clamp(5rem, 11vw, 10rem);
+      line-height: 1;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(0,183,183,0.1);
+      letter-spacing: -0.02em;
+      user-select: none;
+      margin-bottom: -0.5rem;
+    }
+
+    .about-heading {
+      font-family: var(--font-title);
+      font-weight: 800;
+      font-size: clamp(2.4rem, 3.8vw, 3.8rem);
+      line-height: 1.1;
+      color: var(--text);
+      margin-top: 1.5rem;
+    }
+
+    .about-heading em {
+      font-style: italic;
+      color: var(--teal);
+    }
+
+    .about-right { padding-top: 0.5rem; }
+
+    .about-body {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      font-weight: 400;
+      line-height: 1.95;
+      color: var(--text-dim);
+      margin-bottom: 2rem;
+    }
+
+    .about-body strong { color: var(--text); font-weight: 700; }
+
+    .about-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin: 2rem 0 2.5rem;
+    }
+
+    .chip {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 0.35rem 0.9rem;
+      border: 1px solid var(--border);
+      color: var(--teal);
+      background: rgba(0,183,183,0.05);
+      transition: background .2s ease, border-color .2s ease;
+    }
+
+    .chip:hover { background: rgba(0,183,183,0.12); border-color: var(--teal); }
+
+    .about-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--neon);
+      transition: gap .3s ease;
+    }
+
+    .about-link:hover { gap: 1.3rem; }
+    .about-link svg { width: 18px; }
+
+    /* ─────────────────────────────────────────────
+       GALLERY — BRANDS WE MOVE
+    ───────────────────────────────────────────── */
+    .gallery-section {
+      padding: 6rem 0 8rem;
+      overflow: hidden;
+      border-top: 1px solid var(--border);
+    }
+
+    .gallery-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      padding: 0 4rem 4rem;
+    }
+
+    .gallery-title {
+      font-family: var(--font-title);
+      font-weight: 800;
+      font-size: clamp(2.2rem, 3.8vw, 3.5rem);
+      line-height: 1.05;
+      color: var(--text);
+      margin-top: 1rem;
+    }
+
+    .gallery-meta {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      font-weight: 400;
+      letter-spacing: 0.15em;
+      color: var(--text-faint);
+      text-align: right;
+      line-height: 1.8;
+    }
+
+    .gallery-track {
+      display: flex;
+      gap: 1.5rem;
+      padding: 0 4rem;
+      cursor: grab;
+      user-select: none;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .gallery-track::-webkit-scrollbar { display: none; }
+    .gallery-track:active { cursor: grabbing; }
+
+    .gallery-card {
+      flex: 0 0 auto;
+      width: clamp(260px, 22vw, 340px);
+      position: relative;
+    }
+
+    .gallery-card-visual {
+      width: 100%;
+      aspect-ratio: 3/4;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Industry color themes for placeholder visuals */
+    .gallery-card:nth-child(1) .gallery-card-visual { background: linear-gradient(145deg, #001a2e 0%, #003366 60%, #001020 100%); }
+    .gallery-card:nth-child(2) .gallery-card-visual { background: linear-gradient(145deg, #001a1a 0%, #004d4d 60%, #001010 100%); }
+    .gallery-card:nth-child(3) .gallery-card-visual { background: linear-gradient(145deg, #0a1a00 0%, #1a3d00 60%, #050d00 100%); }
+    .gallery-card:nth-child(4) .gallery-card-visual { background: linear-gradient(145deg, #001520 0%, #002a40 60%, #000a10 100%); }
+    .gallery-card:nth-child(5) .gallery-card-visual { background: linear-gradient(145deg, #1a1a00 0%, #3d3d00 60%, #0a0a00 100%); }
+    .gallery-card:nth-child(6) .gallery-card-visual { background: linear-gradient(145deg, #001a2e 0%, #003055 60%, #001018 100%); }
+
+    .gallery-card-visual::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,183,183,0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,183,183,0.06) 1px, transparent 1px);
+      background-size: 30px 30px;
+    }
+
+    /* Icon initial badge */
+    .gallery-card-visual::after {
+      content: attr(data-icon);
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%,-50%);
+      font-family: var(--font-title);
+      font-weight: 800;
+      font-size: 3.5rem;
+      color: rgba(0,183,183,0.3);
+      letter-spacing: 0.02em;
+    }
+
+    .gallery-card-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 55%);
+      opacity: 0;
+      transition: opacity .35s ease;
+    }
+
+    .gallery-card:hover .gallery-card-overlay { opacity: 1; }
+
+    .gallery-card-sku {
+      position: absolute;
+      top: 1rem; right: 1rem;
+      font-family: var(--font-mono);
+      font-size: 0.58rem;
+      color: rgba(0,183,183,0.4);
+      letter-spacing: 0.1em;
+      z-index: 2;
+    }
+
+    .gallery-card-border {
+      position: absolute;
+      inset: 0;
+      border: 1px solid transparent;
+      transition: border-color .35s ease;
+      pointer-events: none;
+      z-index: 3;
+    }
+
+    .gallery-card:hover .gallery-card-border { border-color: rgba(0,183,183,0.4); }
+
+    .gallery-card-info {
+      padding: 1.2rem 0 0;
+    }
+
+    .gallery-card-sector {
+      font-family: var(--font-mono);
+      font-size: 0.58rem;
+      font-weight: 700;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 0.4rem;
+    }
+
+    .gallery-card-name {
+      font-family: var(--font-title);
+      font-weight: 800;
+      font-size: 1.2rem;
+      color: var(--text);
+      margin-bottom: 0.3rem;
+      letter-spacing: 0.02em;
+    }
+
+    .gallery-card-detail {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      color: var(--text-faint);
+      line-height: 1.6;
+    }
+
+    .gallery-card-tag {
+      display: inline-block;
+      margin-top: 0.7rem;
+      font-family: var(--font-mono);
+      font-size: 0.55rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 0.25rem 0.6rem;
+      background: rgba(238,255,65,0.08);
+      border: 1px solid rgba(238,255,65,0.2);
+      color: var(--neon);
+    }
+
+    /* ─────────────────────────────────────────────
+       STATS — OPERATIONAL METRICS
+    ───────────────────────────────────────────── */
+    .stats-section {
+      background: var(--bg-3);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 8rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Background accent */
+    .stats-section::before {
+      content: '';
+      position: absolute;
+      top: -30%;
+      right: -15%;
+      width: 600px; height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(1,99,196,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .stats-inner { max-width: 1400px; margin: 0 auto; position: relative; }
+
+    .stats-top {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 5rem;
+      gap: 3rem;
+    }
+
+    .stats-heading {
+      font-family: var(--font-title);
+      font-weight: 800;
+      font-size: clamp(2.5rem, 4.2vw, 4.5rem);
+      line-height: 1.05;
+      max-width: 420px;
+    }
+
+    .stats-heading em {
+      font-style: italic;
+      color: var(--neon);
+    }
+
+    .stats-desc {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      font-weight: 400;
+      line-height: 1.9;
+      color: var(--text-dim);
+      max-width: 360px;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .stat-item {
+      padding: 2.5rem 3rem 2.5rem 0;
+      border-right: 1px solid var(--border);
+      position: relative;
+    }
+
+    .stat-item:last-child { border-right: none; }
+    .stat-item + .stat-item { padding-left: 3rem; }
+
+    /* neon left-rule on hover */
+    .stat-item::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 2px;
+      background: var(--teal);
+      transform: scaleY(0);
+      transform-origin: bottom;
+      transition: transform .4s var(--ease-out);
+    }
+
+    .stat-item:hover::before { transform: scaleY(1); }
+
+    .stat-value {
+      font-family: var(--font-title);
+      font-weight: 800;
+      font-size: clamp(3rem, 5vw, 5.5rem);
+      line-height: 1;
+      color: var(--text);
+      letter-spacing: -0.02em;
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-value .accent-teal { color: var(--teal); }
+    .stat-value .accent-neon { color: var(--neon); }
+    .stat-value .accent-blue { color: var(--blue); }
+
+    .stat-label {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 0.7rem;
+    }
+
+    .stat-note {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      font-weight: 400;
+      line-height: 1.7;
+      color: var(--text-faint);
+    }
+
+    /* ─────────────────────────────────────────────
+       SERVICES / PROCESS
+    ───────────────────────────────────────────── */
+    .process-section {
+      padding: 10rem 4rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .process-header {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: end;
+      margin-bottom: 5rem;
+    }
+
+    .process-heading {
+      font-family: var(--font-title);
+      font-weight: 800;
+      font-size: clamp(2.5rem, 4vw, 4rem);
+      line-height: 1.05;
+    }
+
+    .process-heading em {
+      font-style: italic;
+      color: var(--blue);
+    }
+
+    .process-intro {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      font-weight: 400;
+      line-height: 1.95;
+      color: var(--text-dim);
+    }
+
+    .process-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .process-item {
+      padding: 3rem 3rem 3rem 0;
+      border-right: 1px solid var(--border);
+      border-top: 1px solid var(--border);
+      position: relative;
+      transition: background .3s ease;
+    }
+
+    .process-item + .process-item { padding-left: 3rem; }
+    .process-item:last-child { border-right: none; }
+    .process-item:hover { background: rgba(0,183,183,0.03); }
+
+    /* Top border glow on hover */
+    .process-item::before {
+      content: '';
+      position: absolute;
+      top: -1px; left: 0; right: 0;
+      height: 2px;
+      background: var(--teal);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform .4s var(--ease-out);
+    }
+
+    .process-item:hover::before { transform: scaleX(1); }
+
+    .process-num {
+      font-family: var(--font-title);
+      font-weight: 800;
+      font-size: 3rem;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(0,183,183,0.25);
+      line-height: 1;
+      margin-bottom: 1.5rem;
+    }
+
+    .process-icon {
+      font-size: 1.6rem;
+      margin-bottom: 1rem;
+      opacity: 0.7;
+    }
+
+    .process-name {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text);
+      margin-bottom: 1rem;
+    }
+
+    .process-desc {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 400;
+      line-height: 1.85;
+      color: var(--text-dim);
+    }
+
+    .process-features {
+      margin-top: 1.2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .process-feat {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      color: var(--text-faint);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .process-feat::before {
+      content: '→';
+      color: var(--teal);
+      font-size: 0.65rem;
+    }
+
+    /* ─────────────────────────────────────────────
+       PHILOSOPHY / QUOTE
+    ───────────────────────────────────────────── */
+    .philosophy-section {
+      padding: 12rem 4rem;
+      background: var(--bg-2);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .philosophy-section::before {
+      content: '"';
+      position: absolute;
+      top: -4rem; left: 50%;
+      transform: translateX(-50%);
+      font-family: var(--font-title);
+      font-size: 32vw;
+      font-weight: 800;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(0,183,183,0.04);
+      line-height: 1;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    /* Ambient glow orbs */
+    .philosophy-section::after {
+      content: '';
+      position: absolute;
+      bottom: -10%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 800px; height: 300px;
+      background: radial-gradient(ellipse, rgba(0,183,183,0.05) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .philosophy-inner {
+      max-width: 1000px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .philosophy-quote {
+      font-family: var(--font-title);
+      font-weight: 800;
+      font-size: clamp(2rem, 4vw, 4.2rem);
+      line-height: 1.2;
+      color: var(--text);
+      margin: 2.5rem 0 3rem;
+      opacity: 0;
+      transform: translateY(30px);
+    }
+
+    .philosophy-quote em {
+      font-style: italic;
+      color: var(--teal);
+    }
+
+    .philosophy-quote .neon-word { color: var(--neon); }
+
+    .philosophy-attrib {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      opacity: 0;
+    }
+
+    .philosophy-attrib::before,
+    .philosophy-attrib::after {
+      content: '';
+      display: block;
+      width: 40px; height: 1px;
+      background: var(--border);
+    }
+
+    /* ─────────────────────────────────────────────
+       TECHNOLOGY STRIP
+    ───────────────────────────────────────────── */
+    .tech-strip {
+      padding: 6rem 4rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .tech-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 3rem;
+    }
+
+    .tech-heading {
+      font-family: var(--font-title);
+      font-weight: 800;
+      font-size: clamp(1.8rem, 2.8vw, 2.8rem);
+      color: var(--text);
+    }
+
+    .tech-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+
+    .tech-item {
+      background: var(--bg);
+      padding: 2rem 1.8rem;
+      transition: background .25s ease;
+    }
+
+    .tech-item:hover { background: rgba(0,183,183,0.04); }
+
+    .tech-item-icon {
+      font-size: 1.4rem;
+      margin-bottom: 0.8rem;
+      opacity: 0.65;
+    }
+
+    .tech-item-name {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text);
+      margin-bottom: 0.4rem;
+    }
+
+    .tech-item-desc {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      font-weight: 400;
+      line-height: 1.7;
+      color: var(--text-faint);
+    }
+
+    /* ─────────────────────────────────────────────
+       CTA / GET A QUOTE
+    ───────────────────────────────────────────── */
+    .cta-section {
+      padding: 10rem 4rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8rem;
+      align-items: center;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .cta-tag {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--teal);
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      margin-bottom: 1.8rem;
+    }
+
+    .cta-tag::before {
+      content: '';
+      display: block;
+      width: 24px; height: 1px;
+      background: var(--teal);
+    }
+
+    .cta-heading {
+      font-family: var(--font-title);
+      font-weight: 800;
+      font-size: clamp(3rem, 5vw, 5.5rem);
+      line-height: 1.0;
+      letter-spacing: -0.01em;
+      margin-bottom: 2rem;
+    }
+
+    .cta-heading .line-teal { color: var(--teal); }
+    .cta-heading .line-neon { color: var(--neon); }
+
+    .cta-body {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      font-weight: 400;
+      line-height: 1.95;
+      color: var(--text-dim);
+      max-width: 380px;
+    }
+
+    .cta-body strong { color: var(--text); font-weight: 700; }
+
+    .cta-checklist {
+      margin-top: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .cta-check {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      font-weight: 400;
+      color: var(--text-dim);
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+    }
+
+    .cta-check span.tick {
+      color: var(--teal);
+      font-weight: 700;
+    }
+
+    /* Form */
+    .cta-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.3rem;
+    }
+
+    .form-field {
+      position: relative;
+    }
+
+    .form-field label {
+      display: block;
+      font-family: var(--font-mono);
+      font-size: 0.58rem;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      margin-bottom: 0.5rem;
+    }
+
+    .form-field input,
+    .form-field select,
+    .form-field textarea {
+      width: 100%;
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid rgba(0,183,183,0.2);
+      padding: 0.8rem 0;
+      color: var(--text);
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      font-weight: 400;
+      outline: none;
+      transition: border-color .25s ease;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+
+    .form-field textarea { resize: none; height: 80px; }
+
+    .form-field input::placeholder,
+    .form-field textarea::placeholder {
+      color: rgba(255,255,255,0.15);
+      font-style: italic;
+    }
+
+    .form-field input:focus,
+    .form-field select:focus,
+    .form-field textarea:focus {
+      border-bottom-color: var(--teal);
+    }
+
+    .form-field select { color: rgba(255,255,255,0.4); cursor: pointer; }
+    .form-field select option { background: #0a0a0a; color: var(--text); }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+
+    .form-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+      margin-top: 0.5rem;
+    }
+
+    .btn-quote {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.8rem;
+      padding: 1rem 2.2rem;
+      background: var(--teal);
+      color: #000;
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      border: none;
+      cursor: pointer;
+      transition: background .2s ease, gap .3s ease;
+    }
+
+    .btn-quote:hover { background: var(--neon); gap: 1.3rem; }
+    .btn-quote svg { width: 16px; flex-shrink: 0; }
+
+    .form-note {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      font-weight: 400;
+      color: var(--text-faint);
+      line-height: 1.6;
+    }
+
+    /* ─────────────────────────────────────────────
+       FOOTER
+    ───────────────────────────────────────────── */
+    footer {
+      border-top: 1px solid var(--border);
+      background: var(--bg-2);
+    }
+
+    .footer-top {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr 1fr 1fr;
+      gap: 4rem;
+      padding: 5rem 4rem 4rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .footer-brand {}
+
+    .footer-logo {
+      font-family: var(--font-title);
+      font-weight: 800;
+      font-size: 1.4rem;
+      letter-spacing: 0.06em;
+      color: var(--text);
+      margin-bottom: 1rem;
+    }
+
+    .footer-logo .dot { color: var(--teal); }
+
+    .footer-tagline {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 400;
+      line-height: 1.8;
+      color: var(--text-faint);
+      margin-bottom: 1.5rem;
+      max-width: 220px;
+    }
+
+    .footer-badge {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 0.55rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.7rem;
+      border: 1px solid rgba(238,255,65,0.3);
+      color: var(--neon);
+    }
+
+    .footer-col-heading {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 1.5rem;
+    }
+
+    .footer-links-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .footer-links-list a {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 400;
+      color: var(--text-faint);
+      transition: color .2s ease;
+    }
+
+    .footer-links-list a:hover { color: var(--teal); }
+
+    .footer-bottom {
+      border-top: 1px solid var(--border);
+      padding: 1.5rem 4rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+    }
+
+    .footer-copy {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      font-weight: 400;
+      color: var(--text-faint);
+      letter-spacing: 0.08em;
+    }
+
+    .footer-bottom-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .footer-bottom-links a {
+      font-family: var(--font-mono);
+      font-size: 0.58rem;
+      color: var(--text-faint);
+      letter-spacing: 0.12em;
+      transition: color .2s ease;
+    }
+
+    .footer-bottom-links a:hover { color: var(--teal); }
+
+    /* ─────────────────────────────────────────────
+       RESPONSIVE
+    ───────────────────────────────────────────── */
+    @media (max-width: 1100px) {
+      nav { padding: 1.2rem 2.5rem; }
+      .hero { padding: 0 2.5rem 5rem; }
+      .about { padding: 7rem 2.5rem; grid-template-columns: 1fr; gap: 3rem; }
+      .gallery-header { padding: 0 2.5rem 3rem; }
+      .gallery-track  { padding: 0 2.5rem; }
+      .stats-section  { padding: 6rem 2.5rem; }
+      .stats-grid { grid-template-columns: repeat(2,1fr); }
+      .stat-item:nth-child(2) { border-right: none; }
+      .stat-item:nth-child(3) { border-top: 1px solid var(--border); border-right: 1px solid var(--border); }
+      .stat-item:nth-child(4) { border-top: 1px solid var(--border); border-right: none; }
+      .stat-item:nth-child(3), .stat-item:nth-child(4) { padding-top: 2.5rem; }
+      .process-section  { padding: 7rem 2.5rem; }
+      .process-header   { grid-template-columns: 1fr; gap: 2rem; }
+      .process-grid     { grid-template-columns: 1fr; }
+      .process-item     { border-right: none !important; border-left: none; border-bottom: 1px solid var(--border); padding: 2.5rem 0 !important; }
+      .process-item::before { top: 0; bottom: auto; height: 2px; width: auto; right: 0; transform: scaleX(0); }
+      .process-item:hover::before { transform: scaleX(1); }
+      .philosophy-section { padding: 8rem 2.5rem; }
+      .tech-strip { padding: 5rem 2.5rem; }
+      .tech-grid  { grid-template-columns: repeat(2,1fr); }
+      .cta-section { padding: 7rem 2.5rem; grid-template-columns: 1fr; gap: 4rem; }
+      .footer-top  { padding: 4rem 2.5rem 3rem; grid-template-columns: 1fr 1fr; gap: 3rem; }
+      .footer-bottom { padding: 1.5rem 2.5rem; }
+      .cursor, .cursor-ring { display: none; }
+    }
+
+    @media (max-width: 640px) {
+      nav { padding: 1.2rem 1.5rem; }
+      .nav-links, .nav-cta { display: none; }
+      .nav-hamburger { display: flex; }
+      .hero { padding: 0 1.5rem 4rem; }
+      .about { padding: 5rem 1.5rem; }
+      .gallery-header { padding: 0 1.5rem 2.5rem; }
+      .gallery-track  { padding: 0 1.5rem; gap: 1rem; }
+      .gallery-card   { width: clamp(220px, 75vw, 300px); }
+      .stats-section  { padding: 5rem 1.5rem; }
+      .stats-top      { flex-direction: column; align-items: flex-start; }
+      .stats-grid     { grid-template-columns: 1fr; }
+      .stat-item      { border-right: none !important; border-top: 1px solid var(--border) !important; padding: 2rem 0 !important; }
+      .stat-item:first-child { border-top: none !important; }
+      .process-section { padding: 5rem 1.5rem; }
+      .philosophy-section { padding: 6rem 1.5rem; }
+      .tech-strip  { padding: 4rem 1.5rem; }
+      .tech-grid   { grid-template-columns: 1fr; }
+      .tech-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+      .cta-section { padding: 5rem 1.5rem; }
+      .form-row    { grid-template-columns: 1fr; }
+      .footer-top  { padding: 3rem 1.5rem 2rem; grid-template-columns: 1fr; gap: 2.5rem; }
+      .footer-bottom { padding: 1.5rem; flex-direction: column; gap: 1rem; text-align: center; }
+      .footer-bottom-links { flex-wrap: wrap; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Custom cursor -->
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- ────────────────────────── NAV ──────────── -->
+  <nav id="nav">
+    <a href="#" class="nav-logo">
+      STORE<span class="dot">·</span>PACK<span class="dot">·</span>SHIP<span class="neon">.</span>
+    </a>
+
+    <ul class="nav-links">
+      <li><a href="#services">Services</a></li>
+      <li><a href="#work">Clients</a></li>
+      <li><a href="#process">How It Works</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+
+    <a href="#contact" class="nav-cta">Get a Quote</a>
+
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle light/dark mode">
+      <span class="toggle-thumb"></span>
+      <span class="toggle-icon toggle-icon--dark">🌙</span>
+      <span class="toggle-icon toggle-icon--light">☀️</span>
+    </button>
+
+    <div class="nav-hamburger" id="hamburger">
+      <span></span><span></span>
+    </div>
+  </nav>
+
+  <!-- ────────────────────────── HERO ─────────── -->
+  <section class="hero" id="hero">
+    <div class="hero-bg"     aria-hidden="true"></div>
+    <div class="hero-grid"   aria-hidden="true"></div>
+    <div class="hero-overlay"   aria-hidden="true"></div>
+    <div class="hero-scanline"  aria-hidden="true"></div>
+
+    <div class="hero-content">
+      <div class="hero-tag" id="heroTag">
+        <span>3PL Fulfillment + CPG Distribution</span>
+        <span class="badge">EST. 2017</span>
+      </div>
+
+      <h1 class="hero-headline" aria-label="Store. Pack. Ship.">
+        <span class="line"><span class="line-inner" id="heroLine1">STORE.</span></span>
+        <span class="line"><span class="line-inner" id="heroLine2"><span class="word-teal">PACK.</span></span></span>
+        <span class="line"><span class="line-inner" id="heroLine3"><span class="word-neon">SHIP.</span></span></span>
+      </h1>
+
+      <div class="hero-bottom" id="heroBottom">
+        <p class="hero-sub">
+          <strong>Full-service 3PL fulfillment</strong> and CPG distribution for e-commerce brands and consumer goods companies that demand precision, speed, and scale — without the overhead.
+        </p>
+        <div class="hero-scroll">
+          <div class="scroll-bar"></div>
+          <span>Scroll</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ────────────────────────── TICKER ───────── -->
+  <div class="ticker-wrap" aria-hidden="true">
+    <div class="ticker-track">
+      <span>eCommerce Fulfillment</span><span class="sep"> ◆ </span>
+      <span>CPG Distribution</span><span class="sep"> ◆ </span>
+      <span>Pick &amp; Pack</span><span class="sep"> ◆ </span>
+      <span>Same-Day Processing</span><span class="sep"> ◆ </span>
+      <span>Inventory Management</span><span class="sep"> ◆ </span>
+      <span>B2B Distribution</span><span class="sep"> ◆ </span>
+      <span>Returns Processing</span><span class="sep"> ◆ </span>
+      <span>Custom Kitting</span><span class="sep"> ◆ </span>
+      <span>Retail-Ready Packaging</span><span class="sep"> ◆ </span>
+      <span>Temperature Control</span><span class="sep"> ◆ </span>
+      <!-- duplicate for seamless loop -->
+      <span>eCommerce Fulfillment</span><span class="sep"> ◆ </span>
+      <span>CPG Distribution</span><span class="sep"> ◆ </span>
+      <span>Pick &amp; Pack</span><span class="sep"> ◆ </span>
+      <span>Same-Day Processing</span><span class="sep"> ◆ </span>
+      <span>Inventory Management</span><span class="sep"> ◆ </span>
+      <span>B2B Distribution</span><span class="sep"> ◆ </span>
+      <span>Returns Processing</span><span class="sep"> ◆ </span>
+      <span>Custom Kitting</span><span class="sep"> ◆ </span>
+      <span>Retail-Ready Packaging</span><span class="sep"> ◆ </span>
+      <span>Temperature Control</span><span class="sep"> ◆ </span>
+    </div>
+  </div>
+
+  <!-- ────────────────────────── ABOUT ────────── -->
+  <div class="about" id="about">
+    <div class="about-left">
+      <div class="about-ghost reveal-fade">3PL</div>
+      <h2 class="about-heading reveal-up">
+        Your fulfillment<br />infrastructure,<br /><em>handled.</em>
+      </h2>
+    </div>
+    <div class="about-right">
+      <div class="section-tag reveal-fade" style="margin-bottom:1.8rem;">Who We Are</div>
+      <p class="about-body reveal-up">
+        <strong>Store Pack n Ship</strong> is a full-service third-party logistics provider built for the speed of modern commerce. We partner with direct-to-consumer e-commerce brands and CPG manufacturers to handle the entire fulfillment chain — from inbound receiving to last-mile delivery.
+      </p>
+      <p class="about-body reveal-up">
+        Whether you're scaling a DTC skincare line, distributing supplements to retail chains, or managing seasonal inventory spikes, our warehouse infrastructure and tech-enabled operations keep your supply chain running without interruption.
+      </p>
+      <div class="about-chips reveal-up">
+        <span class="chip">eCommerce Fulfillment</span>
+        <span class="chip">CPG Distribution</span>
+        <span class="chip">B2B Retail Prep</span>
+        <span class="chip">Custom Kitting</span>
+        <span class="chip">Subscription Boxes</span>
+        <span class="chip">Returns Mgmt</span>
+      </div>
+      <a href="#process" class="about-link reveal-up">
+        See How It Works
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </a>
+    </div>
+  </div>
+
+  <!-- ────────────────────────── GALLERY ──────── -->
+  <section class="gallery-section" id="work">
+    <div class="gallery-header">
+      <div>
+        <div class="section-tag reveal-fade" style="margin-bottom:1.2rem;">Client Industries</div>
+        <h2 class="gallery-title reveal-up">Brands<br />We Move</h2>
+      </div>
+      <div class="gallery-meta reveal-fade">
+        Active Partnerships<br />2020 — Present
+      </div>
+    </div>
+
+    <div class="gallery-track" id="galleryTrack">
+
+      <div class="gallery-card">
+        <div class="gallery-card-visual" data-icon="DTC">
+          <div class="gallery-card-overlay"></div>
+          <div class="gallery-card-sku">SKU-001</div>
+          <div class="gallery-card-border"></div>
+        </div>
+        <div class="gallery-card-info">
+          <div class="gallery-card-sector">Direct-to-Consumer</div>
+          <div class="gallery-card-name">Beauty & Skincare</div>
+          <div class="gallery-card-detail">High-velocity DTC brands with<br />complex bundle SKUs</div>
+          <span class="gallery-card-tag">Pick &amp; Pack</span>
+        </div>
+      </div>
+
+      <div class="gallery-card">
+        <div class="gallery-card-visual" data-icon="CPG">
+          <div class="gallery-card-overlay"></div>
+          <div class="gallery-card-sku">SKU-002</div>
+          <div class="gallery-card-border"></div>
+        </div>
+        <div class="gallery-card-info">
+          <div class="gallery-card-sector">CPG Manufacturing</div>
+          <div class="gallery-card-name">Supplements & Wellness</div>
+          <div class="gallery-card-detail">Retail-ready distribution to<br />national grocery chains</div>
+          <span class="gallery-card-tag">B2B Distribution</span>
+        </div>
+      </div>
+
+      <div class="gallery-card">
+        <div class="gallery-card-visual" data-icon="F&B">
+          <div class="gallery-card-overlay"></div>
+          <div class="gallery-card-sku">SKU-003</div>
+          <div class="gallery-card-border"></div>
+        </div>
+        <div class="gallery-card-info">
+          <div class="gallery-card-sector">Food & Beverage</div>
+          <div class="gallery-card-name">Snack & Beverage CPG</div>
+          <div class="gallery-card-detail">Temperature-sensitive fulfillment<br />and FSMA-compliant storage</div>
+          <span class="gallery-card-tag">Temperature Control</span>
+        </div>
+      </div>
+
+      <div class="gallery-card">
+        <div class="gallery-card-visual" data-icon="APL">
+          <div class="gallery-card-overlay"></div>
+          <div class="gallery-card-sku">SKU-004</div>
+          <div class="gallery-card-border"></div>
+        </div>
+        <div class="gallery-card-info">
+          <div class="gallery-card-sector">Apparel & Accessories</div>
+          <div class="gallery-card-name">Fashion & Soft Goods</div>
+          <div class="gallery-card-detail">Polybag, hang-tag, and<br />multi-channel fulfillment</div>
+          <span class="gallery-card-tag">Custom Kitting</span>
+        </div>
+      </div>
+
+      <div class="gallery-card">
+        <div class="gallery-card-visual" data-icon="HOM">
+          <div class="gallery-card-overlay"></div>
+          <div class="gallery-card-sku">SKU-005</div>
+          <div class="gallery-card-border"></div>
+        </div>
+        <div class="gallery-card-info">
+          <div class="gallery-card-sector">Home & Living</div>
+          <div class="gallery-card-name">Home Goods & Décor</div>
+          <div class="gallery-card-detail">Fragile-item handling and<br />white-glove packaging options</div>
+          <span class="gallery-card-tag">Special Handling</span>
+        </div>
+      </div>
+
+      <div class="gallery-card">
+        <div class="gallery-card-visual" data-icon="SUB">
+          <div class="gallery-card-overlay"></div>
+          <div class="gallery-card-sku">SKU-006</div>
+          <div class="gallery-card-border"></div>
+        </div>
+        <div class="gallery-card-info">
+          <div class="gallery-card-sector">Subscription Commerce</div>
+          <div class="gallery-card-name">Monthly Box Brands</div>
+          <div class="gallery-card-detail">High-volume subscription kitting<br />with custom inserts &amp; branding</div>
+          <span class="gallery-card-tag">Subscription Boxes</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ────────────────────────── STATS ─────────── -->
+  <section class="stats-section" id="stats">
+    <div class="stats-inner">
+      <div class="stats-top">
+        <h2 class="stats-heading reveal-up">
+          Operational<br /><em>Metrics</em>
+        </h2>
+        <p class="stats-desc reveal-up">
+          We don't just promise speed and accuracy — we report it. Every KPI is tracked in real-time and shared with our partners monthly.
+        </p>
+      </div>
+
+      <div class="stats-grid">
+
+        <div class="stat-item">
+          <div class="stat-value reveal-up">
+            <span class="accent-neon">99.8</span><span class="accent-teal">%</span>
+          </div>
+          <div class="stat-label reveal-fade">Order Accuracy Rate</div>
+          <div class="stat-note reveal-fade">Measured across all pick, pack, and ship operations. Industry benchmark sits at 96%.</div>
+        </div>
+
+        <div class="stat-item">
+          <div class="stat-value reveal-up">
+            <span class="accent-teal">5M</span><span style="color:var(--text-faint); font-size:0.55em;">+</span>
+          </div>
+          <div class="stat-label reveal-fade">Units Shipped Annually</div>
+          <div class="stat-note reveal-fade">Across DTC, B2B, and retail distribution channels nationwide.</div>
+        </div>
+
+        <div class="stat-item">
+          <div class="stat-value reveal-up">
+            <span class="accent-blue">&lt;24</span><span class="accent-teal" style="font-size:0.55em; font-weight:700;"> hr</span>
+          </div>
+          <div class="stat-label reveal-fade">Order Processing Time</div>
+          <div class="stat-note reveal-fade">Same-day processing cutoff at 2 PM for all standard fulfillment orders.</div>
+        </div>
+
+        <div class="stat-item">
+          <div class="stat-value reveal-up">
+            <span class="accent-teal">200</span><span style="color:var(--text-faint); font-size:0.55em;">+</span>
+          </div>
+          <div class="stat-label reveal-fade">Active Brand Partners</div>
+          <div class="stat-note reveal-fade">From seed-stage DTC startups to established national CPG manufacturers.</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ────────────────────────── PROCESS ──────── -->
+  <section class="process-section" id="services">
+    <div class="process-header">
+      <h2 class="process-heading reveal-up">
+        The Full<br /><em>Fulfillment</em><br />Stack
+      </h2>
+      <p class="process-intro reveal-up">
+        From the moment inventory arrives at our dock to the second it's in your customer's hands — every step is handled, tracked, and optimized. No dropped balls. No surprise fees.
+      </p>
+    </div>
+
+    <div class="process-grid">
+
+      <div class="process-item">
+        <div class="process-num">01</div>
+        <div class="process-icon">📦</div>
+        <div class="process-name">Inbound Receiving</div>
+        <p class="process-desc">
+          We receive, inspect, count, and log all inbound inventory with full barcode scanning. Your dashboard updates within hours of dock arrival.
+        </p>
+        <div class="process-features">
+          <div class="process-feat">PO reconciliation & discrepancy reporting</div>
+          <div class="process-feat">Barcode / RFID / FNSKU labeling</div>
+          <div class="process-feat">Lot tracking & expiration date mgmt</div>
+          <div class="process-feat">Amazon FBA & Walmart DSV prep</div>
+        </div>
+      </div>
+
+      <div class="process-item">
+        <div class="process-num">02</div>
+        <div class="process-icon">🏭</div>
+        <div class="process-name">Storage & Inventory</div>
+        <p class="process-desc">
+          Flexible bin, shelf, and pallet storage across 200,000 sq ft of climate-controlled, secure warehouse space. Real-time WMS visibility 24/7.
+        </p>
+        <div class="process-features">
+          <div class="process-feat">Real-time inventory dashboard</div>
+          <div class="process-feat">Low-stock alerts & reorder automation</div>
+          <div class="process-feat">FIFO / FEFO inventory rotation</div>
+          <div class="process-feat">Dedicated CPG & DTC storage zones</div>
+        </div>
+      </div>
+
+      <div class="process-item">
+        <div class="process-num">03</div>
+        <div class="process-icon">🚚</div>
+        <div class="process-name">Pick, Pack & Ship</div>
+        <p class="process-desc">
+          Orders flow in from your store — Shopify, Amazon, EDI, or API — and ship the same day. Full carrier network: UPS, FedEx, USPS, LTL, and freight.
+        </p>
+        <div class="process-features">
+          <div class="process-feat">Shopify, WooCommerce, Amazon integration</div>
+          <div class="process-feat">Custom branded packaging & inserts</div>
+          <div class="process-feat">Multi-carrier rate shopping</div>
+          <div class="process-feat">Returns processing & restocking</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ────────────────────────── PHILOSOPHY ───── -->
+  <section class="philosophy-section" id="philosophy">
+    <div class="philosophy-inner">
+      <div class="section-tag reveal-fade" style="justify-content:center; margin-bottom:2.5rem;">
+        Our Operating Principle
+      </div>
+      <blockquote class="philosophy-quote" id="philosophyQuote">
+        "Every order is a <em>promise</em> your brand made to a customer. Our job is to make sure you <span class="neon-word">never break it</span>."
+      </blockquote>
+      <div class="philosophy-attrib" id="philosophyAttrib">
+        The Store Pack n Ship Standard
+      </div>
+    </div>
+  </section>
+
+  <!-- ────────────────────────── TECH ─────────── -->
+  <section class="tech-strip" id="process">
+    <div class="tech-header">
+      <h2 class="tech-heading reveal-up">Platform Integrations</h2>
+      <div class="section-tag reveal-fade">Connected By Default</div>
+    </div>
+    <div class="tech-grid">
+
+      <div class="tech-item">
+        <div class="tech-item-icon">🛒</div>
+        <div class="tech-item-name">Shopify / WooCommerce</div>
+        <div class="tech-item-desc">Native order sync. New orders auto-trigger pick lists within minutes of checkout.</div>
+      </div>
+
+      <div class="tech-item">
+        <div class="tech-item-icon">📦</div>
+        <div class="tech-item-name">Amazon FBA / FBM</div>
+        <div class="tech-item-desc">FBA prep services and FBM direct fulfillment. ASIN-level compliance built in.</div>
+      </div>
+
+      <div class="tech-item">
+        <div class="tech-item-icon">🏪</div>
+        <div class="tech-item-name">EDI / Retail Chains</div>
+        <div class="tech-item-desc">850/856/810 EDI transactions for Walmart, Target, Kroger, and regional retailers.</div>
+      </div>
+
+      <div class="tech-item">
+        <div class="tech-item-icon">📊</div>
+        <div class="tech-item-name">Real-Time WMS Portal</div>
+        <div class="tech-item-desc">Your inventory, orders, and shipments — live. Custom reporting and API access included.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ────────────────────────── CTA ──────────── -->
+  <section class="cta-section" id="contact">
+
+    <div class="cta-left">
+      <div class="cta-tag">Get a Fulfillment Quote</div>
+      <h2 class="cta-heading reveal-up">
+        Ready to<br /><span class="line-teal">offload</span><br /><span class="line-neon">logistics?</span>
+      </h2>
+      <p class="cta-body reveal-up">
+        <strong>Tell us about your volume</strong> and we'll have a custom fulfillment proposal to you within 24 hours. No lock-in contracts. No setup fees on standard SKUs.
+      </p>
+      <div class="cta-checklist reveal-up">
+        <div class="cta-check"><span class="tick">✓</span> No minimum order volumes</div>
+        <div class="cta-check"><span class="tick">✓</span> Transparent per-unit pricing</div>
+        <div class="cta-check"><span class="tick">✓</span> Dedicated account manager from day one</div>
+        <div class="cta-check"><span class="tick">✓</span> Go live in 5–10 business days</div>
+      </div>
+    </div>
+
+    <div class="cta-right reveal-up">
+      <form class="cta-form" onsubmit="handleSubmit(event)">
+        <div class="form-row">
+          <div class="form-field">
+            <label>First Name</label>
+            <input type="text" placeholder="Jane" required />
+          </div>
+          <div class="form-field">
+            <label>Last Name</label>
+            <input type="text" placeholder="Smith" required />
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label>Business Email</label>
+          <input type="email" placeholder="jane@yourbrand.com" required />
+        </div>
+
+        <div class="form-field">
+          <label>Company / Brand Name</label>
+          <input type="text" placeholder="Your Company" />
+        </div>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label>Monthly Order Volume</label>
+            <select>
+              <option value="" disabled selected>Select range</option>
+              <option>Under 500 orders/mo</option>
+              <option>500 – 2,000 orders/mo</option>
+              <option>2,000 – 10,000 orders/mo</option>
+              <option>10,000+ orders/mo</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label>Fulfillment Type</label>
+            <select>
+              <option value="" disabled selected>Select type</option>
+              <option>eCommerce / DTC</option>
+              <option>CPG / Retail Distribution</option>
+              <option>Both</option>
+              <option>Subscription Boxes</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label>Anything Else? (Optional)</label>
+          <textarea placeholder="Special handling, existing 3PL migration, kitting needs..."></textarea>
+        </div>
+
+        <div class="form-footer">
+          <button class="btn-quote" type="submit">
+            Request a Quote
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </button>
+          <p class="form-note">Response within 24 hrs.<br />No spam. No cold calls.</p>
+        </div>
+      </form>
+    </div>
+
+  </section>
+
+  <!-- ────────────────────────── FOOTER ───────── -->
+  <footer>
+    <div class="footer-top">
+
+      <div class="footer-brand">
+        <div class="footer-logo">SPS<span class="dot">.</span></div>
+        <p class="footer-tagline">
+          Third-party logistics built for the speed of modern commerce. eCommerce fulfillment & CPG distribution.
+        </p>
+        <span class="footer-badge">ISO 9001 Compliant</span>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-col-heading">Services</div>
+        <ul class="footer-links-list">
+          <li><a href="#">eCommerce Fulfillment</a></li>
+          <li><a href="#">CPG Distribution</a></li>
+          <li><a href="#">Custom Kitting</a></li>
+          <li><a href="#">Returns Processing</a></li>
+          <li><a href="#">Amazon FBA Prep</a></li>
+          <li><a href="#">Subscription Boxes</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-col-heading">Integrations</div>
+        <ul class="footer-links-list">
+          <li><a href="#">Shopify</a></li>
+          <li><a href="#">WooCommerce</a></li>
+          <li><a href="#">Amazon</a></li>
+          <li><a href="#">Walmart DSV</a></li>
+          <li><a href="#">EDI Retail</a></li>
+          <li><a href="#">API Access</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-col-heading">Company</div>
+        <ul class="footer-links-list">
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">Pricing</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <div class="footer-copy">
+        © 2025 Store Pack n Ship. All rights reserved. &nbsp;|&nbsp; 3PL fulfillment & CPG distribution services.
+      </div>
+      <ul class="footer-bottom-links">
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Terms of Service</a></li>
+        <li><a href="#">SLA Agreement</a></li>
+      </ul>
+    </div>
+  </footer>
+
+
+  <!-- ──────────────────────────────────────────
+       SCRIPTS
+  ─────────────────────────────────────────── -->
+  <script>
+    // ── Theme toggle (runs first — prevents flash) ──
+    (function () {
+      const saved = localStorage.getItem('sps-theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', saved);
+    })();
+
+    const themeToggle = document.getElementById('themeToggle');
+    themeToggle.addEventListener('click', () => {
+      const html = document.documentElement;
+      const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+      localStorage.setItem('sps-theme', next);
+    });
+
+    // ── Nav scroll state ───────────────────────
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 60);
+    }, { passive: true });
+
+    // ── Custom cursor ──────────────────────────
+    const cursor     = document.getElementById('cursor');
+    const cursorRing = document.getElementById('cursorRing');
+    let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
+
+    if (window.matchMedia('(pointer: fine)').matches) {
+      document.addEventListener('mousemove', e => {
+        mouseX = e.clientX; mouseY = e.clientY;
+        cursor.style.transform = `translate(${mouseX}px,${mouseY}px) translate(-50%,-50%)`;
+      });
+
+      (function animateRing() {
+        ringX += (mouseX - ringX) * 0.11;
+        ringY += (mouseY - ringY) * 0.11;
+        cursorRing.style.transform = `translate(${ringX}px,${ringY}px) translate(-50%,-50%)`;
+        requestAnimationFrame(animateRing);
+      })();
+
+      document.querySelectorAll('a, button, .gallery-card, .tech-item').forEach(el => {
+        el.addEventListener('mouseenter', () => {
+          cursor.style.width = '14px'; cursor.style.height = '14px';
+          cursorRing.style.width = '50px'; cursorRing.style.height = '50px';
+        });
+        el.addEventListener('mouseleave', () => {
+          cursor.style.width = '8px'; cursor.style.height = '8px';
+          cursorRing.style.width = '30px'; cursorRing.style.height = '30px';
+        });
+      });
+    }
+
+    // ── GSAP Scroll Animations ─────────────────
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Hero entrance sequence
+    const heroTl = gsap.timeline({ delay: 0.25 });
+    heroTl
+      .to('#heroLine1', { y: '0%', duration: 1.0, ease: 'power4.out' })
+      .to('#heroLine2', { y: '0%', duration: 1.0, ease: 'power4.out' }, '-=0.7')
+      .to('#heroLine3', { y: '0%', duration: 1.0, ease: 'power4.out' }, '-=0.7')
+      .to('#heroTag',   { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }, '-=0.9')
+      .to('#heroBottom',{ opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }, '-=0.5');
+
+    // Scroll-triggered generic reveals
+    gsap.utils.toArray('.reveal-up').forEach(el => {
+      gsap.to(el, {
+        opacity: 1, y: 0, duration: 0.85, ease: 'power3.out',
+        scrollTrigger: { trigger: el, start: 'top 88%', once: true }
+      });
+    });
+
+    gsap.utils.toArray('.reveal-fade').forEach(el => {
+      gsap.to(el, {
+        opacity: 1, duration: 1, ease: 'power2.out',
+        scrollTrigger: { trigger: el, start: 'top 88%', once: true }
+      });
+    });
+
+    // Philosophy section
+    gsap.to('#philosophyQuote', {
+      opacity: 1, y: 0, duration: 1.2, ease: 'power3.out',
+      scrollTrigger: { trigger: '#philosophyQuote', start: 'top 80%', once: true }
+    });
+    gsap.to('#philosophyAttrib', {
+      opacity: 1, duration: 1, delay: 0.4, ease: 'power2.out',
+      scrollTrigger: { trigger: '#philosophyAttrib', start: 'top 85%', once: true }
+    });
+
+    // Gallery stagger
+    gsap.utils.toArray('.gallery-card').forEach((card, i) => {
+      gsap.fromTo(card,
+        { opacity: 0, y: 50 },
+        {
+          opacity: 1, y: 0, duration: 0.75, delay: i * 0.09, ease: 'power3.out',
+          scrollTrigger: { trigger: '#work', start: 'top 75%', once: true }
+        }
+      );
+    });
+
+    // Stat items stagger
+    gsap.utils.toArray('.stat-item').forEach((item, i) => {
+      gsap.fromTo(item,
+        { opacity: 0, y: 25 },
+        {
+          opacity: 1, y: 0, duration: 0.7, delay: i * 0.12, ease: 'power3.out',
+          scrollTrigger: { trigger: '#stats', start: 'top 80%', once: true }
+        }
+      );
+    });
+
+    // Process items stagger
+    gsap.utils.toArray('.process-item').forEach((item, i) => {
+      gsap.fromTo(item,
+        { opacity: 0, y: 30 },
+        {
+          opacity: 1, y: 0, duration: 0.75, delay: i * 0.15, ease: 'power3.out',
+          scrollTrigger: { trigger: '#services', start: 'top 75%', once: true }
+        }
+      );
+    });
+
+    // Tech grid stagger
+    gsap.utils.toArray('.tech-item').forEach((item, i) => {
+      gsap.fromTo(item,
+        { opacity: 0, y: 20 },
+        {
+          opacity: 1, y: 0, duration: 0.6, delay: i * 0.1, ease: 'power3.out',
+          scrollTrigger: { trigger: '.tech-grid', start: 'top 80%', once: true }
+        }
+      );
+    });
+
+    // ── Gallery drag scroll ────────────────────
+    (function () {
+      const track = document.getElementById('galleryTrack');
+      let isDown = false, startX, scrollLeft;
+
+      track.addEventListener('mousedown', e => {
+        isDown = true;
+        track.style.cursor = 'grabbing';
+        startX = e.pageX - track.offsetLeft;
+        scrollLeft = track.scrollLeft;
+      });
+      track.addEventListener('mouseleave', () => { isDown = false; track.style.cursor = 'grab'; });
+      track.addEventListener('mouseup',    () => { isDown = false; track.style.cursor = 'grab'; });
+      track.addEventListener('mousemove',  e => {
+        if (!isDown) return;
+        e.preventDefault();
+        const x = e.pageX - track.offsetLeft;
+        track.scrollLeft = scrollLeft - (x - startX) * 1.6;
+      });
+    })();
+
+    // ── Form submit ────────────────────────────
+    function handleSubmit(e) {
+      e.preventDefault();
+      const btn = e.target.querySelector('.btn-quote');
+      btn.innerHTML = `Quote Request Sent ✓`;
+      btn.style.background    = 'transparent';
+      btn.style.color         = 'var(--teal)';
+      btn.style.border        = '1px solid var(--teal)';
+      btn.style.pointerEvents = 'none';
+    }
+  </script>
+
+</body>
+</html>
